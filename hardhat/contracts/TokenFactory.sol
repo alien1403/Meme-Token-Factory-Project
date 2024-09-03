@@ -2,10 +2,10 @@
 pragma solidity ^0.8.24;
 
 import {Token} from "./Token.sol";
-import "../node_modules/hardhat/console.sol";
-import "../node_modules/@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
-import "../node_modules/@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
-import "../node_modules/@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import "hardhat/console.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 contract TokenFactory {
     struct memeToken {

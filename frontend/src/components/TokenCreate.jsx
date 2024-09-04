@@ -17,12 +17,14 @@ const TokenCreate = () => {
       const signer = await provider.getSigner();
       console.log(signer)
       const contract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS, abi, signer);
+      console.log(contract)
 
       const transaction = await contract.createMemeToken(name, ticker, imageUrl, description,{
         value: ethers.parseUnits("0.0001", 'ether'),
       }); 
+      console.log(transaction)
       const receipt = await transaction.wait();
-
+      console.log(receipt)
       alert(`Transaction successful! Hash: ${receipt.hash}`);
     console.log('Creating token:', { name, ticker, description, imageUrl });
     navigate('/'); 

@@ -4,8 +4,8 @@ pragma solidity ^0.8.24;
 import {Token} from "./Token.sol";
 import "hardhat/console.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
-import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
 contract TokenFactory {
     struct memeToken {
@@ -62,6 +62,16 @@ contract TokenFactory {
         addressToMemeTokenMapping[memeTokenAddress] = newlyCreatedToken;
         console.log("memetoken successfully deployed to: ", memeTokenAddress);
         return memeTokenAddress;
+    }
+
+    function getAllMemeTokens() public view returns (memeToken[] memory) {
+        memeToken[] memory allTokens = new memeToken[](
+            memeTokenAddresses.length
+        );
+        for (uint i = 0; i < memeTokenAddresses.length; i++) {
+            allTokens[i] = addressToMemeTokenMapping[memeTokenAddresses[i]];
+        }
+        return allTokens;
     }
 
     // Using a Taylor series approximation to calculate e^x

@@ -13,13 +13,20 @@ const App = () => {
   useEffect(() => {
     const fetchMemeTokens = async () => {
       try {
-      
-        const provider = new ethers.JsonRpcProvider(process.env.REACT_APP_RPC_URL)
-
-        console.log(provider)
+        const provider = new ethers.JsonRpcProvider(process.env.REACT_APP_RPC_URL);
         const contract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS, abi, provider);
 
+        // Ensure the contract is connected and check the method
+        if (!contract.getAllMemeTokens) {
+          throw new Error('getAllMemeTokens method not found on the contract');
+        }
+
+        // Simulate the call
+        const callStaticResult = await contract.getAllMemeTokens();
+        console.log('callStatic result:', callStaticResult);
+
         const memeTokens = await contract.getAllMemeTokens();
+        console.log('Meme tokens fetched:', memeTokens);
 
         setCards(
           memeTokens.map(token => ({
@@ -27,13 +34,13 @@ const App = () => {
             symbol: token.symbol,
             description: token.description,
             tokenImageUrl: token.tokenImageUrl,
-            fundingRaised: ethers.formatUnits(token.fundingRaised, 'ether'), // Format the fundingRaised from Wei to Ether
+            fundingRaised: ethers.formatUnits(token.fundingRaised, 'ether'),
             tokenAddress: token.tokenAddress,
             creatorAddress: token.creatorAddress,
           }))
         );
       } catch (error) {
-        console.error('Error fetching meme tokens:', error);
+        console.error('Error fetching meme tokens:', error.message || error);
       } finally {
         setLoading(false);
       }
@@ -41,6 +48,8 @@ const App = () => {
 
     fetchMemeTokens();
   }, []);
+
+
 
   const handleSearch = () => {
     console.log('Searching for:', searchTerm);
@@ -61,7 +70,7 @@ const App = () => {
         <h3 className="start-new-coin" onClick={() => navigate('/token-create')}>[start a new coin]</h3>
         <img src="https://pump.fun/_next/image?url=%2Fking-of-the-hill.png&w=256&q=75" alt="Start a new coin" className="start-new-image"/>
         
-      
+        <p>{ cards.length }</p>
         {cards.length > 0 && (
           <div className="card main-card" onClick={() => navigateToTokenDetail(cards[0])}>
             <div className="card-content">

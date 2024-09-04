@@ -20,6 +20,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      ethers:
+        specifier: ^6.13.2
+        version: 6.13.2
     devDependencies:
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0

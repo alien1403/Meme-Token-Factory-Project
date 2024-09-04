@@ -108,6 +108,56 @@ export const abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getAllMemeTokens",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "symbol",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "tokenImageURL",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "fundingRaised",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "tokenAddress",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "creatorAddress",
+            type: "address",
+          },
+        ],
+        internalType: "struct TokenFactory.memeToken[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",

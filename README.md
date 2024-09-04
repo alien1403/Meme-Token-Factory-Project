@@ -78,7 +78,5 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 This project is licensed under the MIT License.
 
 ```css
-
 This `README.md` provides a comprehensive overview of your project, the smart contracts involved, the technical concepts used, and instructions for getting started. You can adjust the content to better fit your project's specifics.
-
 ```

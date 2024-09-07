@@ -38,9 +38,16 @@ const TokenDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-       
+        if (!ethers.isAddress(tokenAddress)) {
+          console.error("Invalid token address format");
+          return;
+        }
+
+        const apiUrl = `https://deep-index.moralis.io/api/v2.2/erc20/${tokenAddress}/owners?chain=sepolia&order=DESC`;
+        console.log(apiUrl); 
+        
         const ownersResponse = await fetch(
-          `https://deep-index.moralis.io/api/v2.2/erc20/${tokenAddress}/owners?chain=sepolia&order=DESC`,
+          apiUrl,
           {
             headers: {
               accept: 'application/json',
@@ -49,6 +56,7 @@ const TokenDetail = () => {
           }
         );
         const ownersData = await ownersResponse.json();
+        console.log(ownersData);
         setOwners(ownersData.result || []);
 
        

@@ -11,15 +11,11 @@ const TokenCreate = () => {
   const [imageUrl, setImageUrl] = useState('');
   const navigate = useNavigate();
 
-    const handleCreate = async () => {
-      console.log("NU MA LASA INIMAAAA");
+  const handleCreate = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      console.log(signer)
       const contract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS, abi, signer);
-      console.log(contract)
-
-      const transaction = await contract.createMemeToken(name, ticker, imageUrl, description,{
+      const transaction = await contract.createMemeToken(name, ticker, description, imageUrl  ,{
         value: ethers.parseUnits("0.0001", 'ether'),
       }); 
       console.log(transaction)

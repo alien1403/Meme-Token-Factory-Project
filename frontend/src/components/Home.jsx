@@ -8,6 +8,7 @@ const App = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [memeTokens, setMemeTokens] = useState([])
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -21,32 +22,32 @@ const App = () => {
           throw new Error('getAllMemeTokens method not found on the contract');
         }
 
-        // Simulate the call
-        const callStaticResult = await contract.getAllMemeTokens();
-        console.log('callStatic result:', callStaticResult);
-
         const memeTokens = await contract.getAllMemeTokens();
-        console.log('Meme tokens fetched:', memeTokens);
+        setMemeTokens(memeTokens);
 
         setCards(
           memeTokens.map(token => ({
             name: token.name,
             symbol: token.symbol,
             description: token.description,
-            tokenImageUrl: token.tokenImageUrl,
+            tokenImageUrl: token[3],
             fundingRaised: ethers.formatUnits(token.fundingRaised, 'ether'),
             tokenAddress: token.tokenAddress,
             creatorAddress: token.creatorAddress,
           }))
         );
+        
+
       } catch (error) {
         console.error('Error fetching meme tokens:', error.message || error);
       } finally {
         setLoading(false);
+        console.log(cards);
       }
     };
 
     fetchMemeTokens();
+    
   }, []);
 
 

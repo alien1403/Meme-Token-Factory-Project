@@ -4,20 +4,21 @@ Welcome to the Meme Token Factory! This project allows users to create their own
 
 [Contract on Etherscan](https://sepolia.etherscan.io/address/0xc71Ef716FA6C7389d237e37852e135239D69BE75)
 
+[Vercel app](https://pump-nqk51to2k-razvans-projects-84f02898.vercel.app/)
+
 ## Table of Contents
 
-- [Meme Token Factory Project](#meme-token-factory-project)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Token Details](#token-details)
-  - [Smart Contracts](#smart-contracts)
-    - [Token.sol](#tokensol)
-    - [TokenFactory.sol](#tokenfactorysol)
-    - [Bonding Curve](#bonding-curve)
-    - [Taylor Series Approximation](#taylor-series-approximation)
-  - [Technologies Used](#technologies-used)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Token Details](#token-details)
+- [Smart Contracts](#smart-contracts)
+  - [Token.sol](#tokensol)
+  - [TokenFactory.sol](#tokenfactorysol)
+  - [Bonding Curve](#bonding-curve)
+  - [Taylor Series Approximation](#taylor-series-approximation)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 

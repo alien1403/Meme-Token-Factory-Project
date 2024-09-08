@@ -4,8 +4,6 @@ Welcome to the Meme Token Factory! This project allows users to create their own
 
 [Contract on Etherscan](https://sepolia.etherscan.io/address/0xc71Ef716FA6C7389d237e37852e135239D69BE75)
 
-[Vercel app](https://pump-nqk51to2k-razvans-projects-84f02898.vercel.app/)
-
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)

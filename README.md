@@ -9,6 +9,7 @@ Welcome to the Meme Token Factory! This project allows users to create their own
 - [Meme Token Factory Project](#meme-token-factory-project)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
+  - [Token Details](#token-details)
   - [Smart Contracts](#smart-contracts)
     - [Token.sol](#tokensol)
     - [TokenFactory.sol](#tokenfactorysol)
@@ -26,6 +27,10 @@ This project enables users to create and manage their own meme tokens with the f
 2. **Funding via Bonding Curve**: Tokens are sold to users based on a bonding curve model, where the price increases as the supply increases.
 3. **Liquidity Pool Creation**: Once a meme token reaches its funding goal, a liquidity pool is automatically created on Uniswap, and liquidity is provided to the pool.
 4. **Automatic LP Token Burning**: After providing liquidity, the LP tokens are automatically burnt, locking the liquidity forever.
+
+## Token Details
+
+![Alt text](frontend\assets\img\token_detail.png)
 
 ## Smart Contracts
 

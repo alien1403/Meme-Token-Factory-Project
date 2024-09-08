@@ -55,6 +55,13 @@ const TokenDetail = () => {
             },
           }
         );
+        if (!ownersResponse.ok) {
+          console.error(`Error fetching data: ${ownersResponse.status} - ${ownersResponse.statusText}`);
+          const errorDetails = await ownersResponse.text(); // to log full error response
+          console.error('Details:', errorDetails);
+          return;
+        }
+
         const ownersData = await ownersResponse.json();
         console.log(ownersData);
         setOwners(ownersData.result || []);

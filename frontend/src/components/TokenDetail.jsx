@@ -133,18 +133,34 @@ const TokenDetail = () => {
   };
 
   // Chart data for owners distribution
-  const ownerDistributionData = {
+  function generateRandomColor() { 
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    const a = (Math.random() * 0.9 + 0.1).toFixed(1); // Alpha between 0.1 and 1
+    return `rgba(${r},${g},${b},${a})`;
+}
+
+function generateColors(num) {
+    const colors = [];
+    for (let i = 0; i < num; i++) {
+        colors.push(generateRandomColor());
+    }
+    return colors;
+}
+
+const ownerDistributionData = {
     labels: owners.map(owner => owner.owner_address),
     datasets: [
-      {
-        label: '% of Total Supply',
-        data: owners.map(owner => owner.percentage_relative_to_total_supply),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
+        {
+            label: '% of Total Supply',
+            data: owners.map(owner => owner.percentage_relative_to_total_supply),
+            backgroundColor: generateColors(owners.length), // Generate an array of colors
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+        },
     ],
-  };
+};
 
   // Chart data for funding progress
   const fundingProgressData = {

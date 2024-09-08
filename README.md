@@ -1,4 +1,4 @@
-# Meme Token Factory Project
+./# Meme Token Factory Project
 
 Welcome to the Meme Token Factory! This project allows users to create their own meme tokens, raise funds through a bonding curve mechanism, and automatically create liquidity pools on Uniswap when certain funding goals are met. Inspired by projects like pump.fun, this platform leverages modern DeFi tools to make meme token creation accessible to everyone.
 
@@ -30,7 +30,7 @@ This project enables users to create and manage their own meme tokens with the f
 
 ## Token Details
 
-![Alt text](frontend\assets\img\token_detail.png)
+![Alt text](./frontend/assets/img/token_detail.png)
 
 ## Smart Contracts
 

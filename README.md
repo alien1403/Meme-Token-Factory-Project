@@ -1,8 +1,10 @@
-./# Meme Token Factory Project
+# Meme Token Factory Project
 
 Welcome to the Meme Token Factory! This project allows users to create their own meme tokens, raise funds through a bonding curve mechanism, and automatically create liquidity pools on Uniswap when certain funding goals are met. Inspired by projects like pump.fun, this platform leverages modern DeFi tools to make meme token creation accessible to everyone.
 
 [Contract on Etherscan](https://sepolia.etherscan.io/address/0xc71Ef716FA6C7389d237e37852e135239D69BE75)
+
+[Vercel Deployment](https://pumpfun-git-main-razvans-projects-84f02898.vercel.app/)
 
 ## Table of Contents
 

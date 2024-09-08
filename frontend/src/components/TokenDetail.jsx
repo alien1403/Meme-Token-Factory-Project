@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import '../App.css'; 
 import { abi } from './abi'; 
 import { tokenAbi } from './tokenAbi';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 const TokenDetail = () => {
   const { tokenAddress } = useParams();
@@ -44,7 +48,6 @@ const TokenDetail = () => {
         }
 
         const apiUrl = `https://deep-index.moralis.io/api/v2.2/erc20/${tokenAddress}/owners?chain=sepolia&order=DESC`;
-        console.log(apiUrl); 
         
         const ownersResponse = await fetch(
           apiUrl,
@@ -55,18 +58,9 @@ const TokenDetail = () => {
             },
           }
         );
-        if (!ownersResponse.ok) {
-          console.error(`Error fetching data: ${ownersResponse.status} - ${ownersResponse.statusText}`);
-          const errorDetails = await ownersResponse.text(); // to log full error response
-          console.error('Details:', errorDetails);
-          return;
-        }
-
         const ownersData = await ownersResponse.json();
-        console.log(ownersData);
         setOwners(ownersData.result || []);
 
-       
         const transfersResponse = await fetch(
           `https://deep-index.moralis.io/api/v2.2/erc20/${tokenAddress}/transfers?chain=sepolia&order=DESC`,
           {
@@ -138,123 +132,164 @@ const TokenDetail = () => {
     }
   };
 
+  // Chart data for owners distribution
+  const ownerDistributionData = {
+    labels: owners.map(owner => owner.owner_address),
+    datasets: [
+      {
+        label: '% of Total Supply',
+        data: owners.map(owner => owner.percentage_relative_to_total_supply),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Chart data for funding progress
+  const fundingProgressData = {
+    labels: ['Funding Raised', 'Remaining to Goal'],
+    datasets: [
+      {
+        label: 'Funding Progress (ETH)',
+        data: [fundingRaised, fundingGoal - fundingRaised],
+        backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
-    <div className="token-detail-container">
-            <nav className="navbar">
-        <a href="#" className="nav-link">[moralis]</a>
-        <a href="#" className="nav-link">[docs]</a>
-        <button className="nav-button">[connect wallet]</button>
-      </nav>
+  <div className="token-detail-container">
+    <nav className="navbar">
+      <a href="#" className="nav-link">[moralis]</a>
+      <a href="#" className="nav-link">[docs]</a>
+      <button className="nav-button">[connect wallet]</button>
+    </nav>
 
-      <h3 className="start-new-coin" onClick={() => navigate('/')}>[go back]</h3>
+    <h3 className="start-new-coin" onClick={() => navigate('/')}>[go back]</h3>
 
-      <div className="token-details-section">
+    <div className="token-details-section">
+      <div className="token-details">
+        <h2>Token Detail for {tokenDetails.name}</h2>
+        <img src={tokenDetails.tokenImageUrl} alt={tokenDetails.name} className="token-detail-image" />
+        <p><strong>Creator Address:</strong> {tokenDetails.creatorAddress}</p>
+        <p><strong>Token Address:</strong> {tokenAddress}</p>
+        <p><strong>Funding Raised:</strong> {tokenDetails.fundingRaised}</p>
+        <p><strong>Token Symbol:</strong> {tokenDetails.symbol}</p>
+        <p><strong>Description:</strong> {tokenDetails.description}</p>
 
-        <div className="token-details">
-          <h2>Token Detail for {tokenDetails.name}</h2>
-          <img src={tokenDetails.tokenImageUrl} alt={tokenDetails.name} className="token-detail-image" />
-          <p><strong>Creator Address:</strong> {tokenDetails.creatorAddress}</p>
-          <p><strong>Token Address:</strong> {tokenAddress}</p>
-          <p><strong>Funding Raised:</strong> {tokenDetails.fundingRaised}</p>
-          <p><strong>Token Symbol:</strong> {tokenDetails.symbol}</p>
-          <p><strong>Description:</strong> {tokenDetails.description}</p>
-        </div>
-
-        <div className="right-column">
-          <div className="progress-bars">
-            <div className="progress-container">
-              <p><strong>Bonding Curve Progress:</strong> {fundingRaised} / {fundingGoal} ETH</p>
-              <div className="progress-bar">
-                <div className="progress" style={{ width: `${fundingRaisedPercentage}%` }}></div>
-              </div>
-              <p>When the market cap reaches {fundingGoal} ETH, all the liquidity from the bonding curve will be deposited into Uniswap, and the LP tokens will be burned. Progression increases as the price goes up.</p>
-            </div>
-
-            <div className="progress-container">
-              <p><strong>Remaining Tokens Available for Sale:</strong> {remainingTokens} / 800,000</p>
-              <div className="progress-bar">
-                <div className="progress" style={{ width: `${totalSupplyPercentage}%` }}></div>
-              </div>
-            </div>
-          </div>
-
-       
-          <div className="buy-tokens">
-            <h3>Buy Tokens</h3>
-            <input
-              type="number"
-              placeholder="Enter amount of tokens to buy"
-              value={purchaseAmount}
-              onChange={(e) => setPurchaseAmount(e.target.value)}
-              className="buy-input"
-            />
-            <button onClick={getCost} className="buy-button">Purchase</button>
-          </div>
+        {/* Owners Distribution Chart inside the Token Details Card */}
+        <div className="owners-distribution-chart" style={{ width: '80%', margin: '20px auto' }}>
+          <h4>Owners Distribution</h4>
+          {loading ? (
+            <p>Loading owners...</p>
+          ) : (
+            <Doughnut data={ownerDistributionData} />
+          )}
         </div>
       </div>
 
+      <div className="right-column">
+        <div className="progress-bars">
+          <div className="progress-container">
+            <p><strong>Bonding Curve Progress:</strong> {fundingRaised} / {fundingGoal} ETH</p>
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${fundingRaisedPercentage}%` }}></div>
+            </div>
+            <p>When the market cap reaches {fundingGoal} ETH, all the liquidity from the bonding curve will be deposited into Uniswap, and the LP tokens will be burned. Progression increases as the price goes up.</p>
+          </div>
 
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h4>Confirm Purchase</h4>
-            <p>Cost of {purchaseAmount} tokens: {cost} ETH</p>
-            <button onClick={handlePurchase} className="confirm-button">Confirm</button>
-            <button onClick={() => setIsModalOpen(false)} className="cancel-button">Cancel</button>
+          <div className="progress-container">
+            <p><strong>Remaining Tokens Available for Sale:</strong> {remainingTokens} / 800,000</p>
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${totalSupplyPercentage}%` }}></div>
+            </div>
+          </div>
+
+          <div className="charts-container" style={{ width: '80%', margin: '20px auto' }}>
+            <h4>Funding Progress</h4>
+            <Bar data={fundingProgressData} />
           </div>
         </div>
-      )}
 
-
-      <h3>Owners</h3>
-      {loading ? (
-        <p>Loading owners...</p>
-      ) : (
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Owner Address</th>
-              <th>Percentage of Total Supply</th>
-            </tr>
-          </thead>
-          <tbody>
-            {owners.map((owner, index) => (
-              <tr key={index}>
-                <td>{owner.owner_address}</td>
-                <td>{owner.percentage_relative_to_total_supply}%</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      <h3>Transfers</h3>
-      {loading ? (
-        <p>Loading transfers...</p>
-      ) : (
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>From Address</th>
-              <th>To Address</th>
-              <th>Value (ETH)</th>
-              <th>Transaction Hash</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transfers.map((transfer, index) => (
-              <tr key={index}>
-                <td>{transfer.from_address}</td>
-                <td>{transfer.to_address}</td>
-                <td>{transfer.value_decimal}</td>
-                <td><a style={{color:"white"}} href={`https://sepolia.etherscan.io/tx/${transfer.transaction_hash}`} target="_blank" rel="noopener noreferrer">{transfer.transaction_hash}</a></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        <div className="buy-tokens-section">
+          <h3>Buy Tokens</h3>
+          <input
+            type="number"
+            placeholder="Enter amount of tokens to buy"
+            value={purchaseAmount}
+            onChange={(e) => setPurchaseAmount(e.target.value)}
+            className="buy-input"
+          />
+          <button onClick={getCost} className="buy-button">Purchase</button>
+        </div>
+      </div>
     </div>
-  );
+
+    {isModalOpen && (
+      <div className="modal">
+        <div className="modal-content">
+          <h4>Confirm Purchase</h4>
+          <p>Cost of {purchaseAmount} tokens: {cost} ETH</p>
+          <button onClick={handlePurchase} className="confirm-button">Confirm</button>
+          <button onClick={() => setIsModalOpen(false)} className="cancel-button">Cancel</button>
+        </div>
+      </div>
+    )}
+
+    <h3>Owners</h3>
+    {loading ? (
+      <p>Loading owners...</p>
+    ) : (
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>Owner Address</th>
+            <th>Percentage of Total Supply</th>
+          </tr>
+        </thead>
+        <tbody>
+          {owners.map((owner, index) => (
+            <tr key={index}>
+              <td>{owner.owner_address}</td>
+              <td>{owner.percentage_relative_to_total_supply}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+
+    <h3>Transfers</h3>
+    {loading ? (
+      <p>Loading transfers...</p>
+    ) : (
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>From Address</th>
+            <th>To Address</th>
+            <th>Value (ETH)</th>
+            <th>Transaction Hash</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transfers.map((transfer, index) => (
+            <tr key={index}>
+              <td>{transfer.from_address}</td>
+              <td>{transfer.to_address}</td>
+              <td>{transfer.value_decimal}</td>
+              <td><a style={{ color: 'white' }} href={`https://sepolia.etherscan.io/tx/${transfer.transaction_hash}`} target="_blank" rel="noopener noreferrer">{transfer.transaction_hash}</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+);
+
+
 };
 
 export default TokenDetail;
